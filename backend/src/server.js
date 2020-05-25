@@ -56,6 +56,7 @@ app.use('*', (req, res, next) => {
 
 app.use('/', require('@routes/router.js'));
 
+app.use('/auth', require('./controllers/userauthentication/registrationController.js'));
 
 // Handle errors
 app.use(errorHandler());
@@ -69,6 +70,6 @@ app.use('*', (req, res) => {
 
 // Open Server on selected Port
 app.listen(
-    PORT,
+    process.env.PORT || 3000,
     () => console.info('Server listening on port ', PORT)
 );

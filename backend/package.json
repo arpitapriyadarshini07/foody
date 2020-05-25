@@ -28,10 +28,10 @@
         "express": "^4.17.1"
     },
     "_moduleAliases": {
-      "@root"      : "src",
-      "@controllers" : "src/controllers",
-      "@models" : "src/models",
-      "@util" : "src/util",
-      "@routes" : "src/routes"
+        "@root": "src",
+        "@controllers": "src/controllers",
+        "@models": "src/models",
+        "@util": "src/util",
+        "@routes": "src/routes"
     }
 }
