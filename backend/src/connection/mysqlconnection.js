@@ -1,4 +1,3 @@
-
 const {
     DB_HOST,
     DB_DATABASE,
@@ -8,11 +7,13 @@ const {
 
 
 
-const mysqlm = require('mysqlm');
+const mysql = require('mysql');
 
-module.exports = mysqlm.connect({
+var connection = mysql.createConnection({
     host: DB_HOST,
     database: DB_DATABASE,
     user: DB_USER,
     password: DB_PASSWORD
-})
+  });
+
+module.exports = {connection};

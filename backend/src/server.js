@@ -25,7 +25,6 @@ require('mandatoryenv').load([
     'DB_USER',
     'DB_PASSWORD',
     'PORT',
-    'SECRET'
 ]);
 
 const { PORT } = process.env;

@@ -1,10 +1,24 @@
 const registrationRouter = require('express').Router();
+const {registrationValidator} = require('./authvalidator')
+const {registerUser} = require('../../services/registration/registrationService');
 
+registrationRouter.post('/registration',async (req,res)=>{
 
-registrationRouter.post('/registration',(req,res)=>{
+    const userdata = req.body;
+    console.log(req.body)
+    const error = await registrationValidator(req.body);
+    console.log(error);
+    if (error)
+    {
+        res.status(400).send(error);
+    }
+    else{
+        res.send('APi Called');
+        registerUser(req.body);
+    }
 
-    res.send('APi Called')
-})
+}
+)
 
 
 // You can require and use your routes here ;)
