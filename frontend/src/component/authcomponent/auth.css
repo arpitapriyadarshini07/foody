@@ -1,0 +1,21 @@
+.paper {
+    margin-top: auto; 
+    display: flex;
+    flex-Direction: column;
+    align-Items: center;
+  }
+
+  .avatar {
+    margin:auto;
+    background-color:rgb(255,0,0) 
+  }
+
+ .form {
+    width: auto
+  }
+  
+  .submit {
+    margin: auto,
+  }
+
+  
