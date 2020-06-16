@@ -9,7 +9,8 @@ module.exports.generateHash=(userpwd)=>
 
 module.exports.compareHash=(userpwd,hashedpwd)=>
 {
+    const value= passwordHash.verify(userpwd,hashedpwd);
+    return value;
 
-    return passwordHash.verify(userpwd,hashedpwd);
 }
 

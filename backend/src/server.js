@@ -56,7 +56,8 @@ app.use('*', (req, res, next) => {
 app.use('/', require('@routes/router.js'));
 
 app.use('/auth', require('./controllers/userauthentication/registrationController.js'));
-
+app.use('/auth', require('./controllers/userauthentication/signinController.js'));
+app.use('/location', require('./controllers/geosearch/geoController.js'));
 // Handle errors
 app.use(errorHandler());
 
