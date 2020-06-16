@@ -7,8 +7,8 @@ signInRouter.post('/signin',(req,res)=>{
     try{
             
        validateSignin(req.body)  
-       .then((respone)=>{
-                res.status(200).send({token:respone.token,name:response.name,message:"Login successful"});
+       .then((value)=>{
+                res.status(200).send({token:value.token,name:value.name,message:"Login successful"});
             })
             .catch((err)=>{
                 res.status(400).send({error:err.errorMessage});

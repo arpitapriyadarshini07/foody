@@ -26,12 +26,13 @@ async function validateSignin(user)
         {
             var password
             result.forEach(element => {
-               
+                firstname=element.first_name;
                 password = element.password;
             if (compareHash(user.password,password))
             {
-                var jwtToken = generateAuthorizationToken(element.user_id,element.user_type)
-                resolve({token:jwtToken,name:element.first_name});
+                
+                var jwtToken = generateAuthorizationToken(element.user_id,element.user_type);
+                resolve({token:jwtToken,name:firstname});
             }
             else
             {
