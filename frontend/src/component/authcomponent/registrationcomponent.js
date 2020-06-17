@@ -6,7 +6,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -19,8 +18,11 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import countries from '../../common/constants/countryConstants'
 import LoaderButton from '../core/button';
-import { postApiCall } from '../../common/util/httputil';
 import { onRegistration } from '../../server/auth/authservice';
+import {
+    Formik
+  } from 'formik';
+import * as Yup from 'yup';
 
 function countryToFlag(isoCode) {
     return typeof String.fromCodePoint !== 'undefined'
@@ -49,20 +51,44 @@ class RegistrationComponent extends React.Component
         this.state = {
             submitProgress:false,
             open:props.open,
-            firstName: "",
-            lastName: "",
-            mobno: "",
             country: "",
-            dialCode: "",
-            gender: "",
-            emailId: "",
-            password: ""
-
+            dialCode: ""
         };
 
     }
 
+    getFormFields()
+    {
+         return {firstName: "",lastName: "",mobno: "",country: "",dialCode: "",gender: "",emailId: "",password: "" }; 
+    }
+
+    validationSchema()  {
+        return Yup.object().shape({
+            emailId: Yup.string()
+              .email('Please provide valid Email')
+              .required('Email is mandatory'),
+              firstName: Yup.string()
+              .required('First Name is Mandatory'),
+              password:Yup.string()
+              .required('Password is Manadatory').matches("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})", { message:"Password should contain 8 digit alphanumeric (should contains atleast one letter,one number,one symbol)",excludeEmptyString: true }),
+              mobno:Yup.number().required('Mobile No is Mandatory').min(6000000000,"Please enter valid mobile number").max(10000000000,"Please enter valid mobile number")
+            }
+            )
+        }
     
+    onSubmit= async (values, { setSubmitting })=>{
+        console.log(values)
+        this.setState({submitProgress:true});
+        values.country=this.state.country;
+        values.dialCode=this.state.dialCode;
+        console.log(this.state);
+        await onRegistration(values);
+        this.setState({
+            submitProgress:false,
+            open:false       
+        }); 
+
+    }
 
     handleClose =()=>
     {
@@ -71,23 +97,34 @@ class RegistrationComponent extends React.Component
         });
     }
 
-    onRegistratonClick=(e)=>{
-        e.preventDefault();
-        this.setState({
-            submitProgress:true       
-        });
-        console.log(this.state)
-        onRegistration(this.state)
-        this.setState({
-            submitProgress:false       
-        }); 
-    }
-
     render()
     {
 
-        return (<Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.open}>
+        return (
+            <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.open}>
                
+        <Formik   
+            initialValues={this.getFormFields()}
+            validationSchema={this.validationSchema()}
+            onSubmit={this.onSubmit}
+            >
+
+        {(formikRef) => {
+            
+                  const {
+                    values,
+                    touched,
+                    errors,
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    handleReset
+                  } = formikRef;
+
+                  return (
+                     
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <div className="paper">
@@ -97,10 +134,11 @@ class RegistrationComponent extends React.Component
                         <Typography component="h1" variant="h5">
                         Sign up
                         </Typography>
-                        <form className="form" noValidate>
+                       
+                        <form className="form" noValidate onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                            <TextField onChange = {(evt) =>{this.setState({firstName:evt.target.value})}}
+                            <TextField
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="outlined"
@@ -108,27 +146,37 @@ class RegistrationComponent extends React.Component
                                 fullWidth
                                 id="firstName"
                                 label="First Name"
-                                autoFocus
+                                autoFocus   
+                                error={errors.firstName && touched.firstName}
+                                value={values.firstName}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.firstName && touched.firstName) && errors.firstName}
                             />
                             </Grid>
                             
                             <Grid item xs={12} sm={6}>
-                            <TextField onChange= {(evt) =>{this.setState({lastName:evt.target.value})}}
-                                variant="outlined"
-                                
+                            <TextField
+                                variant="outlined"    
                                 fullWidth
                                 id="lastName"
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
+                                error={errors.lastName && touched.lastName}
+                                value={values.lastName}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.lastName && touched.lastName) && errors.lastName}
                             />
                             </Grid>
 
                             <Grid item xs={12}>
-                                <Autocomplete onChange= {(evt,value,reason) =>{this.setState({dialCode:value.phone,country:value.code})}}
-                                 
-                                id="country-select-demo"
-                                
+                                <Autocomplete onChange = {(evt,value,reason) =>{this.setState({country:value.code,dialCode:value.phone})}}
+
+                                    
+                                id="country"
+                                name="country"
                                 options={countries}
                                 classes={{
                                     option: "option",
@@ -159,30 +207,39 @@ class RegistrationComponent extends React.Component
 
 
                             <Grid item xs={12}>
-                            <TextField onChange= {(evt) =>{this.setState({mobno:evt.target.value})}}
+                            <TextField
                                 autoComplete="mobno"
-                                name="mobileno"
+                                name="mobno"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="mobileno"
+                                id="mobno"
                                 label="Mobile No"
-                                
+                                error={errors.mobno && touched.mobno}
+                                value={values.mobimobnoleno}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.mobno && touched.mobno) && errors.mobno}
                             />
                             </Grid>
                             <Grid item xs={12}>
-                            <TextField onChange= {(evt) =>{this.setState({emailId:evt.target.value})}}
+                            <TextField 
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="email"
+                                id="emailId"
                                 label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                name="emailId"
+                                autoComplete="emailId"
+                                error={errors.emailId && touched.emailId}
+                                value={values.emailId}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.emailId && touched.emailId) && errors.emailId}
                             />
                             </Grid>
                             <Grid item xs={12}>
-                            <TextField onChange= {(evt) =>{this.setState({password:evt.target.value})}}
+                            <TextField 
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -191,14 +248,19 @@ class RegistrationComponent extends React.Component
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                error={errors.password && touched.password}
+                                value={values.password}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.password && touched.password) && errors.password}
                             />
                             </Grid>
                              <Grid item xs={12}>       
                                 <FormControl component="fieldset">
                                 <FormLabel component="legend">Gender</FormLabel>
-                                <RadioGroup  row aria-label="gender" name="gender1"  value={this.state.gender} onChange={(evt) =>{this.setState({gender:evt.target.value})}}>
+                                <RadioGroup  row aria-label="gender" name="gender" onChange={handleChange} onBlur={handleBlur} value={values.gender}>
                                 
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="female" control={<Radio/>} label="Female" />
                                     <FormControlLabel value="male" control={<Radio />} label="Male" />
                                     <FormControlLabel value="other" control={<Radio />} label="Other" />   
                                 </RadioGroup>
@@ -215,7 +277,7 @@ class RegistrationComponent extends React.Component
                             </Grid>
                         </Grid>
                      
-                        <LoaderButton buttontext="Sign Up" onClick ={this.onRegistratonClick} loading ={this.state.submitProgress}/>
+                        <LoaderButton buttontext="Sign Up" loading ={this.state.submitProgress}/>
                         
                         <Grid container justify="flex-end">
                             <Grid item>
@@ -226,17 +288,15 @@ class RegistrationComponent extends React.Component
                         </Grid>
                         </form>
                     </div>
-                    <Box mt={5}>
-                        
-                    </Box>
                     </Container>
-                </Dialog>
-        );
-    }
-
+              
+                    )
+                }}
+        
+          
+           </Formik>
+         </Dialog>
+    );
+  }
 }
-
-
 export default RegistrationComponent;
-
-

@@ -3,10 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import HomepageComponent from './component/homepage/homepgaecomponent';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
-import RegistrationComponent from './component/authcomponent/registrationcomponent';
-import LoginComponent from './component/authcomponent/logincomponent';
-
-
+import {Provider} from 'react-redux';
+import { createStore } from 'redux';
+import storeCombineReducers from './store/reducer/combinedReducers'
 class App extends React.Component
 {
 
@@ -20,21 +19,15 @@ class App extends React.Component
     {
 
       return (
+        <Provider store= {createStore(storeCombineReducers)}>
         <React.Fragment>
         <HomepageComponent/>
         <Router>  
         <Switch>
-      
-        <Route path = '/auth/register'>  
-          <RegistrationComponent open="true"/>
-        </Route> 
-        <Route path = '/auth/signin'>  
-          <LoginComponent open="true"/>
-        </Route>  
-
         </Switch>
         </Router>
         </React.Fragment>
+        </Provider>
       )
 
     }

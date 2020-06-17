@@ -11,6 +11,13 @@ import Container from '@material-ui/core/Container';
 import Dialog from '@material-ui/core/Dialog';
 import './auth.css';
 import LoaderButton from '../core/button';
+import {
+    Formik
+  } from 'formik';
+import * as Yup from 'yup';
+import { onSignIn } from '../../server/auth/authservice';
+import { saveUserName } from '../../store/actions/authentication';
+import { connect } from 'react-redux';
 
 class LoginComponent extends React.Component
 {
@@ -25,13 +32,31 @@ class LoginComponent extends React.Component
 
     }
 
-    onSigninClick=()=>{
-       
-        this.setState({
-            submitProgress:true
-        });
+    getFormFields()
+    {
+         return {emailId: "",password: "" }; 
     }
+
+    validationSchema()  {
+        return Yup.object().shape({
+            emailId: Yup.string()
+            //   .email('Please provide valid Email Id Or Mobile')
+              .required('Please provide valid email id or mobile no'),
+              password:Yup.string()
+              .required('Password is Manadatory')
+            }
+            )
+        }
     
+    onSubmit= async (values, { setSubmitting })=>{
+        this.setState({submitProgress:true});
+        var response=await onSignIn(values);
+        this.props.signinuser(response.data.name);
+        this.setState({
+            submitProgress:false,
+            open:false       
+        }); 
+    }
 
     handleClose =()=>
     {
@@ -40,11 +65,30 @@ class LoginComponent extends React.Component
         });
     }
 
-
     render()
     {
         return (<Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.open}>
-               
+
+         <Formik   
+            initialValues={this.getFormFields()}
+            validationSchema={this.validationSchema()}
+            onSubmit={this.onSubmit}
+            >
+
+        {(formikRef) => {
+            
+                  const {
+                    values,
+                    touched,
+                    errors,
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    handleReset
+                  } = formikRef;
+      return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className="paper">
@@ -54,39 +98,48 @@ class LoginComponent extends React.Component
                 <Typography component="h1" variant="h5">
                 Sign in
                 </Typography>
-                <form className="form" noValidate>
+                <form className="form" noValidate  onSubmit={handleSubmit}>
                 <Grid container spacing = {2}>
                     <Grid item xs={12}>
-                    <TextField
-                        autoComplete="mobno"
-                        name="mobileno"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="mobileno"
-                        label="Mobile No"
-                        autoFocus
-                    />
+                    <TextField 
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="emailId"
+                                label="Email / Mobile"
+                                name="emailId"
+                                autoComplete="emailId"
+                                error={errors.emailId && touched.emailId}
+                                value={values.emailId}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.emailId && touched.emailId) && errors.emailId}
+                        />
                     </Grid>
                     
                     <Grid item xs={12}>
-                    <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                    />
+                    <TextField 
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                error={errors.password && touched.password}
+                                value={values.password}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={(errors.password && touched.password) && errors.password}
+                            />
                     </Grid>
                      
                     
                     </Grid>
                     <Grid container spacing = {2}>
                         <Grid item xs ={12}>
-                            <LoaderButton buttontext="Sign In" onClick ={this.onSigninClick} loading ={this.state.submitProgress}/>
+                            <LoaderButton buttontext="Sign In"  loading ={this.state.submitProgress}/>
                         </Grid>    
                     </Grid>
                 <Grid container  spacing ={2}> 
@@ -107,6 +160,11 @@ class LoginComponent extends React.Component
                 
             </Box>
             </Container>
+            
+            )
+         }}
+
+            </Formik>
         </Dialog>
 );
 
@@ -115,4 +173,4 @@ class LoginComponent extends React.Component
 }   
 
 
-export default LoginComponent;
+export default connect(null,{signinuser:saveUserName})(LoginComponent);

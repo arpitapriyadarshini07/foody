@@ -2,7 +2,9 @@ import React from 'react';
 import { AppBar, Typography, Button, Link,Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-
+import RegistrationComponent from '../authcomponent/registrationcomponent';
+import LoginComponent from '../authcomponent/logincomponent';
+import { connect } from 'react-redux';
 
 const useStyles = (theme) => ({
     title: {
@@ -46,12 +48,35 @@ class HeaderComponent extends React.Component
 {
     constructor(props)
     {
-        super(props)
-
+        super(props);
+        this.state={submit:false,login:false};
     }
+
+    onNavSubmitBarLink=(evt)=>{
+      this.setState({submit:false});
+      this.setState({submit:true});
+    console.log(this.state);
+    }
+
+
+    onNavBarLoginLink=(evt)=>{
+      this.setState({login:false})
+      this.setState({login:true});
+    console.log(this.state);
+    }
+
+    
 
     render()
     {
+      var generatePopup="";
+      if(this.state.submit)
+         generatePopup=<RegistrationComponent open={true}/>
+      else if(this.state.login)
+          generatePopup=<LoginComponent open={true}/>
+      else
+         generatePopup=""
+
         const {classes}=this.props;
         return (
             
@@ -68,31 +93,56 @@ class HeaderComponent extends React.Component
                   Foody
                 </Link>
                 <div className={classes.right}>
-                  <Link href="/auth/signin"
-                    color="inherit"
-                    variant="h6"
-                    underline="none"
-                    className={classes.rightLink}
-                  >
-                    {'Sign In'}
-                  </Link>
-                  <Link
-                    variant="h6"
-                    underline="none"
-                    className={clsx(classes.rightLink, classes.linkSecondary)}
-                    href="/auth/register"
-                  >
-                    {'Sign Up'}
-                  </Link>
+                {this.getAuthComponent(classes)}
                 </div>
               </Toolbar>
             </AppBar>
-           
+            <React.Fragment>
+            {generatePopup}
+            </React.Fragment>
+            
           </div>
         );
       
 
     }
+    getAuthComponent=(classes)=>{
+      if (this.props.userName!="")
+      {
+         return this.props.userName;
+      }else
+      {
+      return (
+        <React.Fragment>
+      <Link href="#"
+        color="inherit"
+        variant="h6"
+        underline="none"
+        className={classes.rightLink}
+        onClick={this.onNavBarLoginLink}
+      >
+        {'Sign In'}
+      </Link>
+      <Link href="#"
+        variant="h6"
+        underline="none"
+        className={clsx(classes.rightLink, classes.linkSecondary)}
+        onClick={this.onNavSubmitBarLink}
+      >
+        {'Sign Up'}
+      </Link>
+      </React.Fragment>
+
+      )
+    }
+    }
+  }
+
+const mapStateToProps = (state) =>{
+  console.log(state)
+  return {
+     userName:state.userName
+  };
 }
 
-export default withStyles(useStyles)(HeaderComponent);
+export default connect(mapStateToProps,null)(withStyles(useStyles)(HeaderComponent));

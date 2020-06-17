@@ -1,8 +1,12 @@
 import { postApiCall } from "../../common/util/httputil";
 import { SERVICE_URL } from "../config/urlConfig";
 
-const onRegistration= (data) =>
+const onRegistration= async (data) =>
 {
+    var response={
+        error:"",
+        data:""
+    }
     var registrationData = {
 
         firstName : data.firstName,
@@ -15,9 +19,35 @@ const onRegistration= (data) =>
         country: data.country, 
         gender: data.gender
     }
-    console.log('Apimcalled');
-    var res=postApiCall(SERVICE_URL.registrationURL,registrationData)
-    console.log(res);
+    try{
+    var res=await postApiCall(SERVICE_URL.registrationURL,registrationData)
+    }catch(err){
+       console.log(err);
+    }
+
+    return response
+   
 }
 
-export {onRegistration};
+const onSignIn= async (values) =>
+{
+
+    var signindata = {
+        password:values.password
+    }
+
+    var reg = "/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/";
+
+    if(reg.match(values.emailId) ==true){
+        signindata['emailId']=values.emailId;
+    }else{
+        signindata['mobileNo']=values.emailId;
+    }
+
+
+    
+    return postApiCall(SERVICE_URL.signinURL,signindata);
+   
+}
+
+export {onRegistration,onSignIn};
