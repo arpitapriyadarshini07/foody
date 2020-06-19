@@ -6,6 +6,12 @@ const userName =(userName,actions)=>
         return actions.payload;
     }
 
+    if (actions.type == 'SIGNOUT_USER')
+    {
+
+        return actions.payload;
+    }
+
     return "";
 }
 

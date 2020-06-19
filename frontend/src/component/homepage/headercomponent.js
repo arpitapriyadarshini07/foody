@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import RegistrationComponent from '../authcomponent/registrationcomponent';
 import LoginComponent from '../authcomponent/logincomponent';
 import { connect } from 'react-redux';
+import UserMenuComponent from '../user/userMenuComponent';
+
 
 const useStyles = (theme) => ({
     title: {
@@ -93,6 +95,7 @@ class HeaderComponent extends React.Component
                   Foody
                 </Link>
                 <div className={classes.right}>
+                
                 {this.getAuthComponent(classes)}
                 </div>
               </Toolbar>
@@ -100,7 +103,7 @@ class HeaderComponent extends React.Component
             <React.Fragment>
             {generatePopup}
             </React.Fragment>
-            
+             
           </div>
         );
       
@@ -109,7 +112,7 @@ class HeaderComponent extends React.Component
     getAuthComponent=(classes)=>{
       if (this.props.userName!="")
       {
-         return this.props.userName;
+         return <UserMenuComponent userName = {this.props.userName}/>;
       }else
       {
       return (
@@ -139,7 +142,6 @@ class HeaderComponent extends React.Component
   }
 
 const mapStateToProps = (state) =>{
-  console.log(state)
   return {
      userName:state.userName
   };

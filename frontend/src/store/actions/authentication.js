@@ -6,5 +6,13 @@ const saveUserName = (signinname)=>{
     }
 }
 
+const signOutUser = ()=>{
 
-export {saveUserName};
+    return{
+        type: 'SIGNOUT_USER',
+        payload: ""
+    }
+}
+
+
+export {saveUserName,signOutUser};

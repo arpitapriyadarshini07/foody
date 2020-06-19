@@ -142,7 +142,11 @@ class LoginComponent extends React.Component
                             <LoaderButton buttontext="Sign In"  loading ={this.state.submitProgress}/>
                         </Grid>    
                     </Grid>
-                <Grid container  spacing ={2}> 
+
+                </form>
+            </div>
+            <Box mt={5}>
+            <Grid container  spacing ={2}> 
                     <Grid item xs ={6} alignContent="flex-end">
                     <Link href="#" variant="body2"  >
                         Forgot Password?
@@ -154,10 +158,6 @@ class LoginComponent extends React.Component
                     </Link>
                     </Grid>
                 </Grid>
-                </form>
-            </div>
-            <Box mt={5}>
-                
             </Box>
             </Container>
             
