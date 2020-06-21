@@ -1,3 +1,5 @@
+import { getCookie } from "../../common/util/cookieutil";
+import commonConstants from "../../common/constants/commonConstants";
 
 const userName =(userName,actions)=>
 {
@@ -11,8 +13,10 @@ const userName =(userName,actions)=>
 
         return actions.payload;
     }
-
-    return "";
+     var user=getCookie(commonConstants.USER_COOKIE_KEY);
+     console.log(user)
+     return (typeof(user)=='undefined'?"":user.userName);
+    
 }
 
 export {userName};

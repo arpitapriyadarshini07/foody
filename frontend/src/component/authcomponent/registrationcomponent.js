@@ -50,7 +50,7 @@ class RegistrationComponent extends React.Component
         super(props);
         this.state = {
             submitProgress:false,
-            open:props.open,
+            
             country: "",
             dialCode: ""
         };
@@ -84,24 +84,21 @@ class RegistrationComponent extends React.Component
         console.log(this.state);
         await onRegistration(values);
         this.setState({
-            submitProgress:false,
-            open:false       
+            submitProgress:false
         }); 
-
+        this.props.onRegistrationClose();
     }
 
     handleClose =()=>
     {
-        this.setState({
-            open:false
-        });
+        this.props.onRegistrationClose();
     }
 
     render()
     {
 
         return (
-            <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.open}>
+            <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.props.open}>
                
         <Formik   
             initialValues={this.getFormFields()}

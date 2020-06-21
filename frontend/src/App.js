@@ -21,11 +21,14 @@ class App extends React.Component
       return (
         <Provider store= {createStore(storeCombineReducers)}>
         <React.Fragment>
-        <HomepageComponent/>
+        
         <Router>  
         <Switch>
+          <Route path='/user'>
+          </Route>
         </Switch>
         </Router>
+        <HomepageComponent/>
         </React.Fragment>
         </Provider>
       )

@@ -55,16 +55,21 @@ class HeaderComponent extends React.Component
     }
 
     onNavSubmitBarLink=(evt)=>{
-      this.setState({submit:false});
       this.setState({submit:true});
-    console.log(this.state);
     }
 
 
     onNavBarLoginLink=(evt)=>{
-      this.setState({login:false})
       this.setState({login:true});
-    console.log(this.state);
+    }
+
+    onNavSubmitBarLinkClose=()=>{
+      this.setState({submit:false});
+    }
+
+
+    onNavBarLoginLinkClose=()=>{
+      this.setState({login:false});
     }
 
     
@@ -73,9 +78,9 @@ class HeaderComponent extends React.Component
     {
       var generatePopup="";
       if(this.state.submit)
-         generatePopup=<RegistrationComponent open={true}/>
+         generatePopup=<RegistrationComponent open={this.state.submit} onRegistrationClose={this.onNavSubmitBarLinkClose}/>
       else if(this.state.login)
-          generatePopup=<LoginComponent open={true}/>
+          generatePopup=<LoginComponent open={this.state.login} onClose={this.onNavBarLoginLinkClose}/>
       else
          generatePopup=""
 

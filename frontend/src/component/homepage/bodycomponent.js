@@ -18,7 +18,8 @@ class BodyComponent extends React.Component
     render()
     {
 
-        return (<div style={sectionStyle}> </div>)
+        return (<div style={sectionStyle}>
+                 </div>)
 
 
     }

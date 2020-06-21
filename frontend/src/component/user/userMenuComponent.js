@@ -65,7 +65,7 @@ class UserMenuComponent extends React.Component
     {
         return (
             <React.Fragment>
-              <Avatar alt="User" onClick={this.handleClick}>
+              <Avatar alt="User" onMouseOver={this.handleClick}>
               {this.props.userName.charAt(0)}
               </Avatar>
               <Typography>

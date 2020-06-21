@@ -18,6 +18,10 @@ import * as Yup from 'yup';
 import { onSignIn } from '../../server/auth/authservice';
 import { saveUserName } from '../../store/actions/authentication';
 import { connect } from 'react-redux';
+import { setCookie } from '../../common/util/cookieutil';
+import commonConstants from '../../common/constants/commonConstants';
+import Alert from '@material-ui/lab/Alert';
+
 
 class LoginComponent extends React.Component
 {
@@ -27,7 +31,7 @@ class LoginComponent extends React.Component
         super(props);
         this.state = {
             submitProgress:false,
-            open:props.open
+            errorMessage : ""
         };
 
     }
@@ -49,25 +53,32 @@ class LoginComponent extends React.Component
         }
     
     onSubmit= async (values, { setSubmitting })=>{
-        this.setState({submitProgress:true});
+        this.setState({submitProgress:true,errorMessage:""});
+
         var response=await onSignIn(values);
+        if (response.isError)
+        {
+            this.setState({errorMessage:response.errorMessage.error,submitProgress:false})
+        }
+        else{
+        setCookie(commonConstants.USER_COOKIE_KEY,{userName:response.data.name,authToken:response.data.token})
+        
         this.props.signinuser(response.data.name);
         this.setState({
-            submitProgress:false,
-            open:false       
+            submitProgress:false
         }); 
+        this.props.onClose();
+      }
     }
 
     handleClose =()=>
     {
-        this.setState({
-            open:false
-        });
+        this.props.onClose();
     }
 
     render()
     {
-        return (<Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.state.open}>
+        return (<Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" open={this.props.open}>
 
          <Formik   
             initialValues={this.getFormFields()}
@@ -144,6 +155,12 @@ class LoginComponent extends React.Component
                     </Grid>
 
                 </form>
+            
+                <Grid container spacing = {2}>
+                        <Grid item xs ={12}>
+                        {Boolean(this.state.errorMessage)?<Alert severity="error">{this.state.errorMessage}</Alert>:""}
+                        </Grid>    
+                    </Grid>
             </div>
             <Box mt={5}>
             <Grid container  spacing ={2}> 

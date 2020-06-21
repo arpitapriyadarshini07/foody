@@ -1,3 +1,6 @@
+import { removeCookie } from "../../common/util/cookieutil";
+import commonConstants from "../../common/constants/commonConstants";
+
 const saveUserName = (signinname)=>{
 
     return{
@@ -7,7 +10,7 @@ const saveUserName = (signinname)=>{
 }
 
 const signOutUser = ()=>{
-
+    removeCookie(commonConstants.USER_COOKIE_KEY);
     return{
         type: 'SIGNOUT_USER',
         payload: ""
