@@ -117,7 +117,7 @@ class HeaderComponent extends React.Component
     getAuthComponent=(classes)=>{
       if (this.props.userName!="")
       {
-         return <UserMenuComponent userName = {this.props.userName}/>;
+         return <UserMenuComponent userName = {this.props.userName}  history={this.props.history}/>;
       }else
       {
       return (

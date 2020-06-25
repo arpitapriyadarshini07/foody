@@ -6,6 +6,7 @@ import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import { createStore } from 'redux';
 import storeCombineReducers from './store/reducer/combinedReducers'
+import UserHeaderComponent from './component/user/dashboardlayout/userHeaderComponent';
 class App extends React.Component
 {
 
@@ -24,11 +25,14 @@ class App extends React.Component
         
         <Router>  
         <Switch>
-          <Route path='/user'>
+          <Route path ='/user' component={UserHeaderComponent}>
+          
+          </Route>
+          <Route path='/' component={HomepageComponent} exact>
+            
           </Route>
         </Switch>
-        </Router>
-        <HomepageComponent/>
+        </Router> 
         </React.Fragment>
         </Provider>
       )

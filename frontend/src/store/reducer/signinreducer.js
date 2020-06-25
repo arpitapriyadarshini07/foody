@@ -14,7 +14,6 @@ const userName =(userName,actions)=>
         return actions.payload;
     }
      var user=getCookie(commonConstants.USER_COOKIE_KEY);
-     console.log(user)
      return (typeof(user)=='undefined'?"":user.userName);
     
 }

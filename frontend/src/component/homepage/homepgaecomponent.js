@@ -9,7 +9,6 @@ class HomepageComponent extends React.Component
     constructor(props)
     {
         super(props)
-
     }
 
     render()
@@ -17,7 +16,7 @@ class HomepageComponent extends React.Component
 
         return (
                 <div>
-                    <HeaderComponent/>
+                    <HeaderComponent history={this.props.history}/>
                     <BodyComponent/>
                     <FooterComponent/>
                  </div>   

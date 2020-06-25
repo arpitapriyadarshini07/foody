@@ -19,19 +19,12 @@ const onRegistration= async (data) =>
         country: data.country, 
         gender: data.gender
     }
-    try{
-    var res=await postApiCall(SERVICE_URL.registrationURL,registrationData)
-    }catch(err){
-       console.log(err);
-    }
-
-    return response
-   
+    return postApiCall(SERVICE_URL.registrationURL,registrationData)
 }
 
 const onSignIn= async (values) =>
 {
-
+   
     var signindata = {
         password:values.password
     }
@@ -43,11 +36,8 @@ const onSignIn= async (values) =>
     }else{
         signindata['mobileNo']=values.emailId;
     }
-
-
-    
-    return postApiCall(SERVICE_URL.signinURL,signindata);
    
+    return postApiCall(SERVICE_URL.signinURL,signindata);
 }
 
 export {onRegistration,onSignIn};
