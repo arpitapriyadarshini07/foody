@@ -51,6 +51,7 @@ const useStyles = (theme) => ({
     },
     drawerPaper: {
       width: drawerWidth,
+      background: "#f3e5f5"
     },
     drawerHeader: {
       display: 'flex',
@@ -102,11 +103,12 @@ class UserNavigationComponent extends React.Component
               open={this.props.open}
               classes={{
                 paper: classes.drawerPaper,
-              }}
+              }
+            }
             >
               <div className={classes.drawerHeader}>
                 <IconButton onClick={this.handleDrawerClose}>
-                  {classes.root.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                  {classes.root.direction === 'ltr' ?  <ChevronRightIcon /> :<ChevronLeftIcon />}
                 </IconButton>
               </div>
               <Divider />

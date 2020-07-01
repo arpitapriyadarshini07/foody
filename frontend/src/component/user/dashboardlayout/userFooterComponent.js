@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import UserNavigationComponent from './userNavigationComponent';
-import { Avatar } from '@material-ui/core';
 
 
 const drawerWidth = 240;
@@ -106,7 +105,6 @@ class UserHeaderComponent extends React.Component
         return (<div className={classes.root}>
             <CssBaseline />
             <AppBar
-            style={{ background: '#c51162' }}
               position="fixed"
               className={clsx(classes.appBar, {
                 [classes.appBarShift]: this.state.open,
@@ -125,7 +123,6 @@ class UserHeaderComponent extends React.Component
                 <Typography variant="h6" noWrap>
                   Foody
                 </Typography>
-                <Avatar alt="App" src="https://res.cloudinary.com/navupriya/image/upload/v1591635689/logo/application_logo_cl7bge.png" className={classes.large} />
               </Toolbar>
             </AppBar>
             <UserNavigationComponent open={this.state.open} onClose={this.handleNavigationClose}/>

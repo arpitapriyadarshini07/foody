@@ -213,7 +213,7 @@ class RegistrationComponent extends React.Component
                                 id="mobno"
                                 label="Mobile No"
                                 error={errors.mobno && touched.mobno}
-                                value={values.mobimobnoleno}
+                                value={values.mobno}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 helperText={(errors.mobno && touched.mobno) && errors.mobno}

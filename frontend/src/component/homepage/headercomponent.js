@@ -6,6 +6,8 @@ import RegistrationComponent from '../authcomponent/registrationcomponent';
 import LoginComponent from '../authcomponent/logincomponent';
 import { connect } from 'react-redux';
 import UserMenuComponent from '../user/userMenuComponent';
+import StepperUI from '../core/stepper'
+import ReastaurantRegistration from '../authcomponent/restaurantOnboarding/restaurantRegistration';
 
 
 const useStyles = (theme) => ({
@@ -51,7 +53,7 @@ class HeaderComponent extends React.Component
     constructor(props)
     {
         super(props);
-        this.state={submit:false,login:false};
+        this.state={submit:false,login:false,partnerRegister:false};
     }
 
     onNavSubmitBarLink=(evt)=>{
@@ -72,7 +74,14 @@ class HeaderComponent extends React.Component
       this.setState({login:false});
     }
 
-    
+    onclickpartnerlink = () =>{
+      this.setState({partnerRegister:true});
+    }
+
+    onclickpartnerlinkClose = () =>{
+      this.setState({partnerRegister:false});
+    }
+
 
     render()
     {
@@ -81,6 +90,8 @@ class HeaderComponent extends React.Component
          generatePopup=<RegistrationComponent open={this.state.submit} onRegistrationClose={this.onNavSubmitBarLinkClose}/>
       else if(this.state.login)
           generatePopup=<LoginComponent open={this.state.login} onClose={this.onNavBarLoginLinkClose}/>
+      else if(this.state.partnerRegister)
+          generatePopup=<ReastaurantRegistration open={this.state.partnerRegister} onClose={this.onclickpartnerlinkClose}/>    
       else
          generatePopup=""
 
@@ -88,7 +99,8 @@ class HeaderComponent extends React.Component
         return (
             
             <div>
-            <AppBar position="fixed">
+            <AppBar position="fixed" 
+            style={{ background: '#c51162' }}>
               <Toolbar className={classes.toolbar}>
                 <div className={classes.left} />
                 <Link
@@ -138,6 +150,15 @@ class HeaderComponent extends React.Component
         onClick={this.onNavSubmitBarLink}
       >
         {'Sign Up'}
+      </Link>
+
+      <Link href="#"
+        variant="h6"
+        underline="none"
+        className={clsx(classes.rightLink, classes.linkSecondary)}
+        onClick={this.onclickpartnerlink}
+      >
+        {'Become a partner'}
       </Link>
       </React.Fragment>
 

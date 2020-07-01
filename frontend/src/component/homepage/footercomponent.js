@@ -36,12 +36,10 @@ class FooterComponent extends React.Component
         return (
 
             <div className={classes.root}>
-                <Grid container width="100%" >
-                    <Grid item xs={12}>
+                 <Box bgcolor="grey.300">
                     <Paper className={classes.paper}>Powered by NavuPriya</Paper>
-                    </Grid>
-                </Grid>
-              
+              </Box>
+        
             </div>
   
         );
